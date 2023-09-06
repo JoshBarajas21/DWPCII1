@@ -89,3 +89,9 @@ function onListening() {
     : 'port ' + addr.port;
   debug('📣 Listening on ' + bind);
 }
+
+
+// línea de eddy, se encuentra en la 
+// documentación de express
+
+// debug.enabled = true;
