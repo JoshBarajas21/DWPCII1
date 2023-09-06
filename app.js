@@ -3,24 +3,33 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var debug = require('debug')('dwpcii1:server');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+// creando la instancia de express
 var app = express();
 
-// view engine setup
+// configurando el motor de plantillas
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+// se establecen los middlewares
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+// crear un server de archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+// activa "usersRouter" cuando se
+// solicita "/users"
 app.use('/users', usersRouter);
+/* app.use('/author', (req, res) => {
+  res.json({mainDeveloper: "Joshua Barajas"})
+}) */
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
