@@ -7,6 +7,7 @@ var debug = require('debug')('dwpcii1:server');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var tecRouter = require('./routes/tec');
 
 // creando la instancia de express
 var app = express();
@@ -30,6 +31,8 @@ app.use('/users', usersRouter);
 /* app.use('/author', (req, res) => {
   res.json({mainDeveloper: "Joshua Barajas"})
 }) */
+
+app.use('/about', tecRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
