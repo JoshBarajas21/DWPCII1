@@ -11,7 +11,9 @@ router.get('/', function(req, res, next) {
   router.get('/tec', function(_, res) {
     const styles = ["estilos.css","estilos2.css","estilos3.css"];
     const selectStyle = Math.floor(Math.random() * styles.length);
-    res.render('tec', {javascript: "../scripts/script.js",
+    const images = ["itgam1.jpg","itgam2.jpg","itgam3.jpg","itgam4.jpg"];
+    const selectImagen = Math.floor(Math.random() * images.length);
+    res.render('tec', {image: `/images/${images[selectImagen]}`,
     style: `../stylesheets/${styles[selectStyle]}`,
     setIcon: '../images/TecNM.png',
     title: "About ITGAM"})
