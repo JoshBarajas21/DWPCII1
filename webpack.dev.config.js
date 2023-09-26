@@ -1,6 +1,8 @@
 // Archivo con la lógica del front
 // Importar el módulo PATH
 const path = require('path');
+// Importing Extract Plugin
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 // exportamos un Configuration Options Object
 module.exports = {
@@ -41,7 +43,7 @@ module.exports = {
                   {
                     'modules': false,
                     'useBuiltIns': 'usage',
-                    'targets': '> 0.25%, not dead',
+                    'targets': '> 0.25%, not dead', //version final de scripts, puede ser espécifico o genérico
                     'corejs': 3
                   }
                 ]
@@ -49,7 +51,15 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
       }
     ]
-  }
+  },
+  plugins: [new MiniCssExtractPlugin({
+    // Archivo css de salida
+    filename: 'styles/app.css'
+  })]
 }

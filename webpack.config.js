@@ -3,6 +3,8 @@
 
 // Importar un administrador de rutas de archivos
 const path = require('path');
+// Importing Extract Plugin
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 // Exportamos un objeto de configuración
 // que sera usado por webpack
@@ -42,7 +44,15 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader']
       }
     ]
-  }
+  },
+  plugins: [new MiniCssExtractPlugin({
+    // Archivo css de salida
+    filename: 'styles/app.css'
+  })]
 }
