@@ -1,6 +1,6 @@
 // Importando dependencia debug
-import Debug from 'debug'
+import Debug from 'debug';
 // Establecemos el proceso a debuggear
-const debug = Debug('DWPCII1:server')
+const debug = Debug('dwpcii:server');
 // exportando el logger de debuggeo
-module.exports = debug;
+export default debug;
