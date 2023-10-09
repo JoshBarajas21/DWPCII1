@@ -12,7 +12,7 @@
     "b:s": "npm run cleans && babel ./server --out-dir dist --copy-files",
     "b:c": "npm run cleanc && webpack --config ./webpack.config.js --mode production",
     "build": "npm run b:c && npm run b:s",
-    "clean:logs" : "rm -rf ./server/logs/*.log"
+    "clean:logs": "rm -rf ./server/logs/*.log"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -20,6 +20,7 @@
     "express": "~4.16.1",
     "hbs": "~4.0.4",
     "http-errors": "~1.6.3",
+    "materialize-css": "^1.0.0-rc.2",
     "morgan": "~1.9.1",
     "webpack": "^5.76.1",
     "webpack-cli": "^5.0.1",
