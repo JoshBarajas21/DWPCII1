@@ -4,7 +4,6 @@ import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
-// var debug = require('debug')('dwpcii1:server');
 // Setting Webpack Modules
 import webpack from 'webpack';
 import WebpackDevMiddleware from 'webpack-dev-middleware';
@@ -17,8 +16,8 @@ import configTemplateEngine from './config/templateEngine';
 import log from './config/winston';
 // example to import debugLogger
 import debug from './services/debugLogger';
-import indexRouter from './routes/index';
-import usersRouter from './routes/users';
+// Importando enrutador
+import router from './router';
 
 // Creando variable del directorio raiz
 // eslint-disable-next-line
@@ -72,13 +71,7 @@ app.use(cookieParser());
 // crear un server de archivos estáticos
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-app.use('/', indexRouter);
-// activa "usersRouter" cuando se
-// solicita "/users"
-app.use('/users', usersRouter);
-/* app.use('/author', (req, res) => {
-  res.json({mainDeveloper: "Joshua Barajas"})
-}) */
+router.addRoutes(app);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

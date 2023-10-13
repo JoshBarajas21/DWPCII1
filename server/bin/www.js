@@ -25,7 +25,7 @@ const server = http.createServer(app);
 function normalizePort(val) {
   const port = parseInt(val, 10);
 
-  if (typeof port === 'number') {
+  if (Number.isNaN.port) {
     // named pipe
     return val;
   }
