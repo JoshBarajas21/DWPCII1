@@ -1,5 +1,3 @@
-// Helps to handle http errors
-import createError from 'http-errors';
 import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
@@ -12,7 +10,7 @@ import WebpackHotMiddleware from 'webpack-hot-middleware';
 import webpackConfig from '../webpack.dev.config';
 // Importing template-engine
 import configTemplateEngine from './config/templateEngine';
-// Impornting winston logger
+// Importing winston logger
 import log from './config/winston';
 // example to import debugLogger
 import debug from './services/debugLogger';
@@ -72,23 +70,5 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 router.addRoutes(app);
-
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-  log.info(`404 Página no encontrada ${req.method} ${req.originalUrl}`);
-  next(createError(404));
-});
-
-// error handler
-app.use((err, req, res) => {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  log.error(`${err.status || 500} - ${err.message}`);
-  res.render('error');
-});
 
 export default app;
