@@ -14,6 +14,9 @@ import log from '../config/winston';
 // Importing configuration keys
 import configKeys from '../config/configKeys';
 
+// Importing db connection function
+import connectWithRetry from '../database/mongooseConnection';
+
 /**
  * Create HTTP server.
  */
@@ -91,6 +94,9 @@ function onListening() {
 // documentación de express
 
 // debug.enabled = true;
+
+// Launching db connection
+connectWithRetry(configKeys.MONGO_URL);
 
 /**
  * Listen on provided port, on all network interfaces.

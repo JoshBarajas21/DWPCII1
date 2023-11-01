@@ -15,12 +15,6 @@ const addRoutes = (app) => {
   app.use('/project', projectRouter);
   app.use('/about', homeRouter);
   // ERRORES
-  // catch 404 and forward to error handler
-  app.use((req, res, next) => {
-    log.info(`404 Página no encontrada ${req.method} ${req.originalUrl}`);
-    next(createError(404));
-  });
-
   // error handler
   app.use((err, req, res) => {
     // set locals, only providing error in development
@@ -32,7 +26,11 @@ const addRoutes = (app) => {
     log.error(`${err.status || 500} - ${err.message}`);
     res.render('error');
   });
-
+  // catch 404 and forward to error handler
+  app.use((req, res, next) => {
+    log.info(`404 Página no encontrada ${req.method} ${req.originalUrl}`);
+    next(createError(404));
+  });
   return app;
 };
 

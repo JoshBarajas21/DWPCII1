@@ -21,7 +21,6 @@ export default (app) => {
   app.set('view engine', 'hbs');
   // Se establece la ruta de las vistas
   app.set('views', path.join(__dirname, '..', 'views'));
-  
 
   // Se retorna la instancia de la app
   return app;

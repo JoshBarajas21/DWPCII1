@@ -134,3 +134,7 @@ dist
 /public/styles/app.css
 /public/bundle.js
 ...
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
