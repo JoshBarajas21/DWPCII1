@@ -17,16 +17,22 @@ const addPost = (req, res) => {
   // se le informa al cliente
   if (validationError) {
     log.info('Se entrega al cliente error de validación de add Project');
-    res.status(422).json(validationError);
-  } else {
-    // En caso de que pase la validación
-    // Se desestructura la información
-    // de la peticion
-    const { validData: project } = req;
-    // Se contesta la información
-    // del proyecto al cliente
-    res.status(200).json(project);
+    const { value: project } = validationError;
+    const errorModel = validationError.inner.reduce((prev, curr) => {
+      const workinPrev = prev;
+      workinPrev[`${curr.path}`] = curr.message;
+      return workinPrev;
+    }, {});
+    return res.status(422).render('project/addView', { project, errorModel });
   }
+  // En caso de que pase la validación
+  // Se desestructura la información
+  // de la peticion
+  const { validData: project } = req;
+  // Se contesta la información
+  // del proyecto al cliente
+  log.info('Se entrega al cliente la información del projecto cargado');
+  return res.status(200).json(project);
 };
 
 // Controlador Home
