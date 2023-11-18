@@ -1,6 +1,9 @@
 // Actions methods
 import log from '../../config/winston';
 
+// Importando el modelo
+import ProjectModel from './project.model';
+
 // GET '/user/project/["projects", "dashboard"]'
 const showdasboard = (req, res) => {
   res.send("🚧 UNDER CONSTRUCTION '/user/project/[projects o dashboard]' 🚧");
@@ -10,7 +13,7 @@ const add = (req, res) => {
   res.render('project/addView');
 };
 
-const addPost = (req, res) => {
+const addPost = async (req, res) => {
   // Rescatando la info del formulario
   const { errorData: validationError } = req;
   // En caso de haber error
@@ -25,14 +28,21 @@ const addPost = (req, res) => {
     }, {});
     return res.status(422).render('project/addView', { project, errorModel });
   }
-  // En caso de que pase la validación
-  // Se desestructura la información
+  // En caso de que pase la validació se desestructura la información
   // de la peticion
   const { validData: project } = req;
-  // Se contesta la información
-  // del proyecto al cliente
-  log.info('Se entrega al cliente la información del projecto cargado');
-  return res.status(200).json(project);
+  try {
+    // Creando la instancia de un documento con los valores de 'project'
+    const savedProject = await ProjectModel.create(project);
+    // Se contesta la información del proyecto al cliente
+    log.info('Se entrega al cliente información del proyecto cargado');
+    return res.status(200).json(savedProject);
+  } catch (error) {
+    log.error(
+      'ln 53 project.controller: Error al guardar proyecto en la base de datos',
+    );
+    return res.status(500).json(error);
+  }
 };
 
 // Controlador Home
