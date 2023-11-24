@@ -12,6 +12,8 @@ import methodOverride from 'method-override';
 
 // Importing webpack configuration
 import webpackConfig from '../webpack.dev.config';
+// Importing webpack configuration
+import configSession from './config/configSessions';
 // Importing template-engine
 import configTemplateEngine from './config/templateEngine';
 // Importing winston logger
@@ -85,6 +87,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // Enable put and delet verbs
 app.use(methodOverride('_method'));
+// Habilitando manejo de sesiones y mensajes flash
+configSession(app);
 // crear un server de archivos estáticos
 app.use(express.static(path.join(__dirname, '..', 'public')));
 

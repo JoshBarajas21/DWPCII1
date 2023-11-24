@@ -65,6 +65,8 @@ const editPut = async (req, res) => {
     // Se salvan los cambios
     log.info(`Actualizando proyecto con id: ${id}`);
     await project.save();
+    // Generando mensaje FLASH
+    req.flash('successMessage', 'Proyecto editado con éxito');
     return res.redirect(`/project/edit/${id}`);
   } catch (error) {
     log.error(`Error al actualizar proyecto con id: ${id}`);
@@ -110,6 +112,8 @@ const addPost = async (req, res) => {
     log.info(`Se carga proyecto ${savedProject}`);
     // Se registra en el log el redireccionamiento
     log.info('Se redirecciona el sistema a /project');
+    // Agregando mensaje flash
+    req.flash('successMessage', 'Proyecto agregado con exito');
     // Se redirecciona el sistema a la ruta '/project'
     return res.redirect('/project/dashboard');
   } catch (error) {
@@ -127,6 +131,8 @@ const deleteProject = async (req, res) => {
   // Usando el modelo para borrar el proyecto
   try {
     const result = await ProjectModel.findByIdAndRemove(id);
+    // Aregando mensaje flash
+    req.flash('successMessage', 'Proyecto borrado con Exito');
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json(error);
