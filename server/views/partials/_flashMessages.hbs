@@ -1,11 +1,10 @@
 {{#if successMessage}}
   <script>
     document.querySelector('script[src="/bundle.js"]').onload = ()=>{
-        M.toast({
-            html: "<i class='material-icons'>donde</i> {{ successMessage }}",
-            classes: 'card-panel accent-4 white-text',
-            displayLenght: 2000
-        })
+      M.toast({
+        html: "<i class='material-icons'>done</i> {{ successMessage }}", 
+        classes: 'card-panel green accent-4 white-text',
+        displayLength: 2000 })
     }
   </script>
 {{/if}}
