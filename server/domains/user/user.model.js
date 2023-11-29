@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import validator from 'validator';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
+import uniqueValidator from 'mongoose-unique-validator';
 // 2.- Desestructurando la fn Schema
 const { Schema } = mongoose;
 // 3.- Creando el esquema
@@ -53,6 +54,9 @@ const UserShcema = new Schema(
   { timestamps: true },
 );
 
+// Adding Plugins to Schema
+UserShcema.plugin(uniqueValidator);
+
 // Asignando methods de instancia
 UserShcema.methods = {
   // Metodo para encriptar el password
@@ -62,6 +66,19 @@ UserShcema.methods = {
   // Genera un token de 64 caracteres aleatorios
   generateConfirmationToken() {
     return crypto.randomBytes(64).toString('hex');
+  },
+  // Funcion de transformacion a Json personalizada
+  toJSON() {
+    return {
+      id: this._id,
+      firstName: this.firstName,
+      lastname: this.lastname,
+      mail: this.mail,
+      emailConfirmationToken: this.generateConfirmationToken,
+      emailConfirmationAt: this.emailConfirmationAt,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
   },
 };
 

@@ -1,5 +1,8 @@
 // Importing Logs
 import log from '../../config/winston';
+// Importing model
+import User from './user.model';
+
 // Actions methods
 
 // GET '/user/login'
@@ -21,13 +24,29 @@ const register = (req, res) => {
 };
 
 // POST '/user/register'
-const registerPost = (req, res) => {
-  const { validData, errorData } = req;
+const registerPost = async (req, res) => {
+  const { validData: userFormData, errorData } = req;
   log.info('Se procesa formulario de registro');
-  res.json({
-    validData,
-    errorData,
-  });
+  // Verificando si hay errores
+  if (errorData) {
+    return res.json(errorData);
+  }
+  // En caso de no haber errores, se creal al usuario
+  try {
+    // 1. Se crea una nstancia del modelo User
+    // mediante la función create del modelo
+    const user = await User.create(userFormData);
+    log.info(`Usuario creado: ${JSON.stringify(user)}`);
+    // 3. Se contesta al cliente con el usuario creado
+    return res.status(200).json(user.toJSON());
+  } catch (error) {
+    log.error(error);
+    return res.json({
+      message: error.message,
+      name: error.name,
+      errors: error.errors,
+    });
+  }
 };
 
 // Controlador Home
