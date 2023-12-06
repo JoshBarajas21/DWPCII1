@@ -100,6 +100,16 @@ app.use(passport.session());
 // crear un server de archivos estáticos
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
+// Guardando en las variables locales
+// de express el usuario deserealizado
+// para que este sea accesible en las vistas
+// con handlebars
+app.use((req, res, next) => {
+  log.info('👤 Guardando el usuario en la variable local');
+  res.locals.user = req.user?.toJSON();
+  next();
+});
+
 router.addRoutes(app);
 
 export default app;

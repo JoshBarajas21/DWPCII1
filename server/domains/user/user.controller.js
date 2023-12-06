@@ -9,12 +9,26 @@ import User from './user.model';
 const login = (req, res) => {
   // Sirve el formulario de login
   log.info('Se entrega el formulario login');
+  if (req.query.message) {
+    res.locals.passportError = `Usuario o contraseña incorrectos`;
+  }
   res.render('user/login');
 };
 
 // GET '/user/logout'
 const logout = (req, res) => {
-  res.send("🚧 UNDER CONSTRUCTION '/user/logout' 🚧");
+  // Passport incrusta en la petición el
+  // método logout aqui se ejecuta
+  // REF: https://www.passportjs.org/concepts/authentication/logout/
+  req.logout((err) => {
+    if (err) {
+      return res.json(err);
+    }
+    // Creamos mensaje de flash
+    req.flash('successMessage', 'Ha cerrado sesión correctamente');
+    // Redireccionamos al login
+    return res.redirect('/user/login');
+  });
 };
 
 // GET '/user/register'

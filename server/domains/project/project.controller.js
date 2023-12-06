@@ -76,6 +76,10 @@ const editPut = async (req, res) => {
 
 // GET '/user/project/["projects", "dashboard"]'
 const showdashboard = async (req, res) => {
+  // Log de los query params
+  if (req.query.message) {
+    res.locals.successMessage = `Bienvenido a Projnotes ${req.user.firstName}`;
+  }
   // Consultado todos los proyectos
   const projects = await ProjectModel.find({}).lean().exec();
   // Enviando los proyectos al cliente en JSON
