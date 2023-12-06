@@ -4,10 +4,15 @@ import validator from 'validator';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import uniqueValidator from 'mongoose-unique-validator';
+
+import log from '../../config/winston';
+import configKeys from '../../config/configKeys';
+import MailSender from '../../services/mailSender';
+
 // 2.- Desestructurando la fn Schema
 const { Schema } = mongoose;
 // 3.- Creando el esquema
-const UserShcema = new Schema(
+const UserSchema = new Schema(
   {
     firstName: { type: String, required: true },
     lastname: { type: String, required: true },
@@ -61,17 +66,17 @@ const UserShcema = new Schema(
 );
 
 // Adding Plugins to Schema
-UserShcema.plugin(uniqueValidator);
+UserSchema.plugin(uniqueValidator);
 
 // Asignando methods de instancia
-UserShcema.methods = {
+UserSchema.methods = {
   // Metodo para encriptar el password
   hashPassword() {
     return bcrypt.hashSync(this.password, 10);
   },
   // Genera un token de 64 caracteres aleatorios
   generateConfirmationToken() {
-    return crypto.randomBytes(64).toString('hex');
+    return crypto.randomBytes(32).toString('hex');
   },
   // Funcion de transformacion a Json personalizada
   toJSON() {
@@ -90,13 +95,59 @@ UserShcema.methods = {
 };
 
 // Hooks
-UserShcema.pre('save', function presave(next) {
+UserSchema.pre('save', function presave(next) {
   // Encriptar el password
   if (this.isModified('password')) {
     this.password = this.hashPassword();
   }
+  // Creando el token de confirmacion
+  this.emailConfirmationToken = this.generateConfirmationToken();
   return next();
 });
 
+UserSchema.post('save', async function sendConfirmationMail() {
+  // Creating Mail options
+  const options = {
+    host: configKeys.SMTP_HOST,
+    port: configKeys.SMTP_PORT,
+    secure: false,
+    auth: {
+      user: configKeys.MAIL_USERNAME,
+      pass: configKeys.MAIL_PASSWORD,
+    },
+  };
+
+  const mailSender = new MailSender(options);
+
+  // Configuring mail data
+  mailSender.mail = {
+    from: 'jorge.rr@gamadero.tecnm.mx',
+    to: this.mail,
+    subject: 'Account confirmation',
+  };
+
+  try {
+    const info = await mailSender.sendMail(
+      'confirmation',
+      {
+        user: this.firstName,
+        lastname: this.lastname,
+        mail: this.mail,
+        token: this.emailConfirmationToken,
+      },
+      `Estimado ${this.firstName} ${this.lastname} 
+      para validar tu cuenta debes hacer clic en el siguiente
+      enlace: /user/confirm/${this.token}`,
+    );
+
+    if (!info) return log.info('😭 No se pudo enviar el correo');
+    log.info('🎉 Correo enviado con exito');
+    return info;
+  } catch (error) {
+    log.error(`🚨 ERROR al enviar correo: ${error.message}`);
+    return null;
+  }
+});
+
 // 4.- Compilando el modelo y exportando
-export default mongoose.model('user', UserShcema);
+export default mongoose.model('user', UserSchema);
