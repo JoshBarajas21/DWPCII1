@@ -1,6 +1,8 @@
 import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
+// Importando passport
+import passport from 'passport';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 // Setting Webpack Modules
@@ -89,6 +91,12 @@ app.use(cookieParser());
 app.use(methodOverride('_method'));
 // Habilitando manejo de sesiones y mensajes flash
 configSession(app);
+
+// Agrendo middleware de passport
+app.use(passport.initialize());
+// Agregando el middleware de passport
+// para el manejo de sesiones
+app.use(passport.session());
 // crear un server de archivos estáticos
 app.use(express.static(path.join(__dirname, '..', 'public')));
 

@@ -10,6 +10,11 @@ import userValidator from './user.validator';
 // Importando el factory de validacion
 import ValidateFactory from '../../services/validateFactory';
 
+// Importando middleware de autenticacion passport
+// de estrategia local
+
+import { authLocal } from '../../services/auth.services';
+
 // Creando una instancia del enrutador
 const router = new Router();
 
@@ -36,6 +41,9 @@ router.get(
   ValidateFactory(userValidator.token),
   userController.confirm,
 );
+
+// POST user/login
+router.post('/login', authLocal);
 
 // Exporto este tramo de ruta
 export default router;
